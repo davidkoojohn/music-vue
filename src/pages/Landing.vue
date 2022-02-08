@@ -62,24 +62,9 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, reactive } from 'vue'
 import { ElMessage, ElLoading } from "element-plus"
+import qs from "qs"
+
 const tagTypes = ["", "success", "info", "warning", "danger"]
-
-/**
- * object转化成url拼接样式
- * @param obj 需要转化的参数
- */
-const objToUrl = (obj: any) => {
-  let arr = [];
-  for(let i in obj){
-    if (obj.hasOwnProperty(i)) {
-      arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-    }
-  }
-  return arr.join("&");
-}
-//调用
-// objToUrl({name:'hehe',age:10})
-
 const artistArea = [
     { text: "全部", val: -1 },
     { text: "华语", val: 7 },
@@ -115,9 +100,10 @@ const obj: any = reactive({
   type: -1,
   initial: -1,
 })
+
 const artistListFilter = async (channel: string, val: any) => {
   obj[channel] = val
-  await getArtistList(objToUrl(obj))
+  await getArtistList(qs.stringify(obj))
 }
 
 onBeforeMount(async () => {
