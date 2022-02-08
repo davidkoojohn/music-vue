@@ -48,7 +48,11 @@
           :sm="6"
           :md="4"
       >
-        <el-card :body-style="{ padding: '10px' }" shadow="hover">
+        <el-card
+            :body-style="{ padding: '10px' }"
+            shadow="hover"
+            @click="toArtistDetailPage(item.id)"
+        >
           <img :src="item.picUrl" class="image"/>
           <div style="padding-top: 10px">
             <span>{{ item.name }}</span>
@@ -61,9 +65,11 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount, reactive } from 'vue'
+import { useRouter } from "vue-router"
 import { ElMessage, ElLoading } from "element-plus"
 import qs from "qs"
 
+const router = useRouter()
 const tagTypes = ["", "success", "info", "warning", "danger"]
 const artistArea = [
     { text: "全部", val: -1 },
@@ -104,6 +110,15 @@ const obj: any = reactive({
 const artistListFilter = async (channel: string, val: any) => {
   obj[channel] = val
   await getArtistList(qs.stringify(obj))
+}
+
+const toArtistDetailPage = (id: number) => {
+  router.push({
+    name: "ArtistDetail",
+    params: {
+      id
+    }
+  })
 }
 
 onBeforeMount(async () => {
