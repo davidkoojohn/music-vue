@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount, reactive } from 'vue'
+import { ElMessage, ElLoading } from "element-plus"
 const tagTypes = ["", "success", "info", "warning", "danger"]
 
 /**
@@ -95,12 +96,18 @@ const artistType = [
 ]
 const artistList = ref([])
 const getArtistList = (query: string = "") => {
+  const loading = ElLoading.service({ fullscreen: true })
   fetch(`http://localhost:3000/artist/list?${query}`)
       .then(res => res.json())
       .then(res => {
-        // console.log(res)
         const { artists } = res
         artistList.value = artists
+      })
+      .catch(() => {
+        ElMessage.error("网络错误，请稍后重试！")
+      })
+      .finally(() => {
+        loading.close()
       })
 }
 const obj: any = reactive({
