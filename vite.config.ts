@@ -14,5 +14,8 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-  ]
+  ],
+  server: {
+    port: 4000
+  }
 })
