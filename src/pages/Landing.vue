@@ -5,7 +5,7 @@
       <el-tag
           v-for="(item, index) of artistArea"
           :key="item.val"
-          :effect="item.val === obj.area ? 'dark' : 'plain'"
+          :effect="item.val === artistFilter.area ? 'dark' : 'plain'"
           @click="artistListFilter('area', item.val)"
       >
         {{ item.text }}
@@ -16,7 +16,7 @@
       <el-tag
           v-for="(item, index) of artistType"
           :key="item.val"
-          :effect="item.val === obj.type ? 'dark' : 'plain'"
+          :effect="item.val === artistFilter.type ? 'dark' : 'plain'"
           @click="artistListFilter('type', item.val)"
       >
         {{ item.text }}
@@ -25,7 +25,7 @@
     <div class="filter-row">
       <span>筛选：</span>
       <el-tag
-          :effect="obj.initial === -1 ? 'dark' : 'plain'"
+          :effect="artistFilter.initial === -1 ? 'dark' : 'plain'"
           @click="artistListFilter('initial', -1)"
       >
         热门
@@ -33,7 +33,7 @@
       <el-tag
           v-for="(item, index) of `abcdefghijklmnopqrstuvwxyz`"
           :key="item"
-          :effect="item === obj.initial ? 'dark' : 'plain'"
+          :effect="item === artistFilter.initial ? 'dark' : 'plain'"
           @click="artistListFilter('initial', item)"
       >
         {{ item.toUpperCase() }}
@@ -64,42 +64,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, reactive, toRefs } from 'vue'
 import { useRouter } from "vue-router"
 import { ElMessage, ElLoading } from "element-plus"
-import qs from "qs"
+import { useArtistStore } from "../stores/artist"
+import { artistArea, tagTypes, artistType } from "../stores/artist.static"
 
 const router = useRouter()
-const tagTypes = ["", "success", "info", "warning", "danger"]
-const artistArea = [
-    { text: "全部", val: -1 },
-    { text: "华语", val: 7 },
-    { text: "欧美", val: 96 },
-    { text: "日本", val: 8 },
-    { text: "韩国", val: 16 },
-    { text: "其他", val: 0 },
-]
-const artistType = [
-  { text: "全部", val: -1 },
-  { text: "男歌手", val: 1 },
-  { text: "女歌手", val: 2 },
-  { text: "乐队", val: 3 },
-]
-const artistList = ref([])
-const getArtistList = (query: string = "") => {
+
+const artist = useArtistStore();
+const { artistList, artistFilter } = toRefs(artist)
+
+const getArtistList = async () => {
   const loading = ElLoading.service({ fullscreen: true })
-  fetch(`http://localhost:3000/artist/list?${query}`)
-      .then(res => res.json())
-      .then(res => {
-        const { artists } = res
-        artistList.value = artists
-      })
-      .catch(() => {
-        ElMessage.error("网络错误，请稍后重试！")
-      })
-      .finally(() => {
-        loading.close()
-      })
+  try {
+    await artist.fetchArtistList()
+  } catch (e) {
+    ElMessage.error("网络错误，请稍后重试！")
+  } finally {
+    loading.close()
+  }
 }
 const obj: any = reactive({
   area: -1,
@@ -108,8 +92,8 @@ const obj: any = reactive({
 })
 
 const artistListFilter = async (channel: string, val: any) => {
-  obj[channel] = val
-  await getArtistList(qs.stringify(obj))
+  artist.setArtistFilter(channel, val)
+  await getArtistList()
 }
 
 const toArtistDetailPage = (id: number) => {
