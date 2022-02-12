@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 
 const router = createRouter({
   history: createWebHashHistory(),
+  linkExactActiveClass: "active",
   routes: [
     {
       path: "/",
@@ -10,8 +11,29 @@ const router = createRouter({
     },
     {
       path: "/artist/:id",
-      name: "ArtistDetail",
-      component: () => import("../pages/ArtistDetail.vue")
+      component: () => import("../pages/ArtistDetail.vue"),
+      children: [
+        {
+          path: "",
+          name: "ArtistDetail",
+          component: () => import("../pages/Artist/Detail.vue")
+        },
+        {
+          path: "album",
+          name: "ArtistAlbum",
+          component: () => import("../pages/Artist/Album.vue")
+        },
+        {
+          path: "",
+          name: "ArtistMV",
+          component: () => import("../pages/Artist/MV.vue")
+        },
+        {
+          path: "simi",
+          name: "ArtistSimi",
+          component: () => import("../pages/Artist/Simi.vue")
+        },
+      ]
     },
     {
       path: "/about",
