@@ -17,7 +17,8 @@ export const useArtistStore = defineStore("artist", {
     },
     async fetchArtistList() {
       const query = qs.stringify(this.artistFilter)
-      const { artists = [] } = await getArtists(query)
+      const res = await getArtists(query)
+      const { artists = [] } = res
       this.artistList = artists
     }
   }

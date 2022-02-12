@@ -6,21 +6,27 @@
     <p>专辑数：{{ artistInfo.albumSize }}</p>
     <p>mv数：{{ artistInfo.mvSize }}</p>
     <p class="desc">简介：{{ artistInfo.briefDesc }}</p>
-    <div>
-      <nav>
-        <router-link :to="{ name: 'ArtistAlbum', params: { id } }">专辑</router-link>
-        <router-link :to="{ name: 'ArtistMV', params: { id } }">MV</router-link>
-        <router-link :to="{ name: 'ArtistDetail', params: { id } }">歌手详情</router-link>
-        <router-link :to="{ name: 'ArtistSimi', params: { id } }">相似歌手</router-link>
-      </nav>
-      <router-view/>
-    </div>
+
+    <el-divider content-position="left">
+      <el-icon><headset /></el-icon>
+    </el-divider>
+    <el-space :size="size" :spacer="spacer">
+      <router-link :to="{ name: 'ArtistAlbum', params: { id } }">专辑</router-link>
+      <router-link :to="{ name: 'ArtistMV', params: { id } }">MV</router-link>
+      <router-link :to="{ name: 'ArtistDetail', params: { id } }">歌手详情</router-link>
+      <router-link :to="{ name: 'ArtistSimi', params: { id } }">相似歌手</router-link>
+    </el-space>
+    <router-view/>
   </base-layout>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue"
+import { onBeforeMount, ref, h } from "vue"
 import { useRoute } from "vue-router"
+import { Headset } from "@element-plus/icons-vue"
+
+const size = ref(10)
+const spacer = h(ElDivider, { direction: 'vertical' })
 
 const route = useRoute()
 const { id } = route.params
@@ -52,8 +58,8 @@ onBeforeMount(async () => {
 a {
   position: relative;
   text-decoration: none;
-  margin-right: 10px;
   color: inherit;
+  margin: 0 20px;
 }
 
 a::after {

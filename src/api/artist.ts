@@ -1,16 +1,17 @@
+import http from "../utils/http"
 
 export function getArtist(id: number) {
-  return fetch(`https://koo-music.vercel.app/artist/detail?id=${id}`).then(res => res.json())
+  return http.get(`/artist/detail?id=${id}`)
 }
 
 export function getArtistMV(id: number) {
-  return fetch(`https://koo-music.vercel.app/artist/mv?id=${id}`).then(res => res.json())
+  return http.get(`/artist/mv?id=${id}`)
 }
 
 export function getArtistMVUrl(id: number) {
-  return fetch(`https://koo-music.vercel.app/mv/url?id=${id}&r=1080`).then(res => res.json())
+  return http.get(`/mv/url?id=${id}&r=1080`)
 }
 
 export function getArtists(query: string = "") {
-  return fetch(`https://koo-music.vercel.app/artist/list?${query}`).then(res => res.json())
+  return http.get(`/artist/list?${query}`)
 }
