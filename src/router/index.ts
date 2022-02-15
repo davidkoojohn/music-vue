@@ -24,7 +24,7 @@ const router = createRouter({
           component: () => import("../pages/Artist/Album.vue")
         },
         {
-          path: "",
+          path: "mv",
           name: "ArtistMV",
           component: () => import("../pages/Artist/MV.vue")
         },

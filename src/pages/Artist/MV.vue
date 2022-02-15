@@ -1,36 +1,70 @@
 <template>
-  <ol>
-    <li v-for="item of artistMV" :key="item.id" @click="playMV(item.id)">
-      <img :src="item.imgurl" width="200" alt="">
-      <p>{{ item.name }}</p>
-    </li>
-  </ol>
-  <video controls :src="mp4" width="400" autoplay></video>
+  <el-row :gutter="10">
+    <el-col
+      v-for="item of artistMV"
+      :key="item.id"
+      :span="6"
+      :xs="12"
+      :sm="8"
+      :md="6"
+    >
+      <el-card
+        :body-style="{ padding: '10px' }"
+      >
+        <img height="200" :src="item.imgurl" class="image"/>
+        <div style="padding-top: 10px">
+          <span class="ellipsis">{{ item.name }}</span>
+        </div>
+      </el-card>
+    </el-col>
+  </el-row>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, toRefs } from "vue";
+import { useRoute } from "vue-router"
+import {  ElLoading, ElMessage } from "element-plus"
+import { useArtistStore } from "../../stores/artist"
 
-const artistMV = ref<any>({})
+const { id } = useRoute().params
+const artist = useArtistStore()
+const { artistMV } = toRefs(artist)
 
-/*const getArtistMV = async () => {
-  const { mvs } = await fetch(`http://localhost:3000/artist/mv?id=${id}`).then(res => res.json())
-  artistMV.value = mvs
-  console.log(mvs)
-}*/
-
-const mp4 = ref("")
-const playMV = async (id: number) => {
-  const { data } = await fetch(`http://localhost:3000/mv/url?id=${id}&r=1080`).then(res => res.json())
-  console.log(data.url)
-  mp4.value = data.url
+const getArtistMV = async (id: number) => {
+  const loading = ElLoading.service({ fullscreen: true })
+  try {
+    await artist.fetchArtistMV(id)
+  } catch (e) {
+    ElMessage.error("网络错误，请稍后重试！")
+  } finally {
+    loading.close()
+  }
 }
 
 onBeforeMount(async () => {
-  // await getArtistMV()
+  await getArtistMV(+id)
 })
 </script>
 
 <style scoped>
+.image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
 
+.ellipsis {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.el-row {
+  margin-top: 20px;
+}
+
+.el-card {
+  margin-bottom: 10px;
+}
 </style>
