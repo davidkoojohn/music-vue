@@ -59,8 +59,7 @@ import { Search } from "@element-plus/icons-vue"
 }
 
 .container {
-  height: calc(100vh - 60px);
-  overflow: auto;
+  min-height: calc(100vh - 60px);
 }
 
 .el-main {

@@ -18,6 +18,7 @@ declare module 'vue' {
     ElSpace: typeof import('element-plus/es')['ElSpace']
     ElTag: typeof import('element-plus/es')['ElTag']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
 

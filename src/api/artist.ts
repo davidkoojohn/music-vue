@@ -5,7 +5,21 @@ export function getArtist(id: number) {
 }
 
 export function getArtistMV(id: number) {
-  return http.get(`/artist/mv?id=${id}`)
+  return http.get(`/artist/mv`, {
+    params: { id }
+  })
+}
+
+export function getArtistAlbum(id: number) {
+  return http.get(`/artist/album`, {
+    params: { id }
+  })
+}
+
+export function getArtistSimi(id: number) {
+  return http.get(`/simi/artist`, {
+    params: { id }
+  })
 }
 
 export function getArtistMVUrl(id: number) {

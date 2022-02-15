@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="10">
+  <el-row :gutter="10" v-loading="loading">
     <el-col
       v-for="item of artistMV"
       :key="item.id"
@@ -29,15 +29,15 @@ import { useArtistStore } from "../../stores/artist"
 const { id } = useRoute().params
 const artist = useArtistStore()
 const { artistMV } = toRefs(artist)
-
+const loading = ref<boolean>(false)
 const getArtistMV = async (id: number) => {
-  const loading = ElLoading.service({ fullscreen: true })
   try {
+    loading.value = true
     await artist.fetchArtistMV(id)
   } catch (e) {
     ElMessage.error("网络错误，请稍后重试！")
   } finally {
-    loading.close()
+    loading.value = false
   }
 }
 

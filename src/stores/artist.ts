@@ -1,6 +1,6 @@
 import { acceptHMRUpdate, defineStore } from "pinia"
 import qs from "qs"
-import {getArtists, getArtist, getArtistMV} from "../api/artist"
+import {getArtists, getArtist, getArtistMV, getArtistAlbum, getArtistSimi} from "../api/artist"
 
 export const useArtistStore = defineStore("artist", {
   state: () => ({
@@ -12,6 +12,8 @@ export const useArtistStore = defineStore("artist", {
     } as any,
     artistInfo: {},
     artistMV: {},
+    artistAlbum: [],
+    artistSimi: [],
   }),
   actions: {
     setArtistFilter(channel: any, val: any) {
@@ -32,6 +34,16 @@ export const useArtistStore = defineStore("artist", {
       const res: any = await getArtistMV(id)
       const { mvs } = res
       this.artistMV = mvs
+    },
+    async fetchArtistAlbum(id: number) {
+      const res: any = await getArtistAlbum(id)
+      const { hotAlbums } = res
+      this.artistAlbum = hotAlbums
+    },
+    async fetchArtistSimi(id: number) {
+      const res: any = await getArtistSimi(id)
+      const { artists } = res
+      this.artistSimi = artists
     }
   }
 })
