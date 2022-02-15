@@ -21,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, h } from "vue"
+import { onBeforeMount, ref, h, toRefs } from "vue"
 import { useRoute } from "vue-router"
 import { Headset } from "@element-plus/icons-vue"
+import { useArtistStore } from "../stores/artist"
+import { ElLoading, ElMessage } from "element-plus";
 
 const size = ref(10)
 const spacer = h(ElDivider, { direction: 'vertical' })
@@ -31,17 +33,22 @@ const spacer = h(ElDivider, { direction: 'vertical' })
 const route = useRoute()
 const { id } = route.params
 
-const artistInfo = ref<any>({})
+const artist = useArtistStore()
+const { artistInfo } = toRefs(artist)
 
-/*
-const getArtistDetail = async () => {
-  const { data } = await fetch(`http://localhost:3000/artist/detail?id=${id}`).then(res => res.json())
-  // console.log(data.artist)
-  artistInfo.value = data.artist
-}*/
+const getArtist = async () => {
+  const loading = ElLoading.service({ fullscreen: true })
+  try {
+    await artist.fetchArtistDetail(+id)
+  } catch (e) {
+    ElMessage.error("网络错误，请稍后重试！")
+  } finally {
+    loading.close()
+  }
+}
 
 onBeforeMount(async () => {
-  // await getArtistDetail()
+  await getArtist()
 })
 </script>
 
