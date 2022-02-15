@@ -36,10 +36,10 @@ const { id } = route.params
 const artist = useArtistStore()
 const { artistInfo } = toRefs(artist)
 
-const getArtist = async () => {
+const getArtist = async (id: number) => {
   const loading = ElLoading.service({ fullscreen: true })
   try {
-    await artist.fetchArtistDetail(+id)
+    await artist.fetchArtistDetail(id)
   } catch (e) {
     ElMessage.error("网络错误，请稍后重试！")
   } finally {
@@ -48,7 +48,7 @@ const getArtist = async () => {
 }
 
 onBeforeMount(async () => {
-  await getArtist()
+  await getArtist(+id)
 })
 </script>
 
