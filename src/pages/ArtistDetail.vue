@@ -10,12 +10,25 @@
         <el-skeleton-item variant="text" />
       </template>
       <template #default>
-        <h1>{{ artistInfo.name }}</h1>
-        <img :src="artistInfo.cover" :alt="artistInfo.name" width="200">
-        <p>单曲数：{{ artistInfo.musicSize }}</p>
-        <p>专辑数：{{ artistInfo.albumSize }}</p>
-        <p>mv数：{{ artistInfo.mvSize }}</p>
-        <p class="desc">简介：{{ artistInfo.briefDesc }}</p>
+        <el-row :gutter="10">
+          <el-col
+            :span="6"
+            :xs="24"
+          >
+            <img :src="artistInfo.cover" :alt="artistInfo.name" style="width: 100%; max-width: 240px">
+          </el-col>
+          <el-col
+            :span="18"
+            :xs="24"
+            class="info"
+          >
+            <h1>{{ artistInfo.name }}</h1>
+            <p>单曲数：{{ artistInfo.musicSize }}</p>
+            <p>专辑数：{{ artistInfo.albumSize }}</p>
+            <p>mv数：{{ artistInfo.mvSize }}</p>
+            <p class="desc">简介：{{ artistInfo.briefDesc }}</p>
+          </el-col>
+        </el-row>
       </template>
     </el-skeleton>
     <el-divider content-position="left">
@@ -65,6 +78,11 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
+.info h1,
+.info p {
+  margin: 0 0 8px 0;
+}
+
 .desc {
   overflow: hidden;
   text-overflow: ellipsis;
