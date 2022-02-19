@@ -5,14 +5,11 @@
         <router-link class="logo" :to="{ name: 'Landing'}">
           <img height="40" src="../assets/logo.png" alt="音乐🎵">
         </router-link>
-        <el-input
-            placeholder="请输入搜索关键词"
-            class="search"
-        >
-          <template #append>
-            <el-button :icon="Search"></el-button>
-          </template>
-        </el-input>
+        <SearchComponent
+          :fetchSuggestions="querySearchAsync"
+          @onSearch="handleSearch"
+          @onSelect="handleSelect"
+        />
       </div>
     </el-header>
     <div class="container">
@@ -29,8 +26,34 @@
   </el-container>
 </template>
 
-<script setup>
-import { Search } from "@element-plus/icons-vue"
+<script setup lang="ts">
+import SearchComponent from "../components/SearchComponent.vue"
+import { debounce } from "lodash"
+
+const handleSearch = debounce((data: string) => {
+  console.log(data)
+}, 500)
+
+const handleSelect = (item: any) => {
+  console.log(item)
+}
+
+const suggestions = [
+  { value: 'vue', link: 'https://github.com/vuejs/vue' },
+  { value: 'element', link: 'https://github.com/ElemeFE/element' },
+  { value: 'cooking', link: 'https://github.com/ElemeFE/cooking' },
+  { value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui' },
+  { value: 'vuex', link: 'https://github.com/vuejs/vuex' },
+  { value: 'vue-router', link: 'https://github.com/vuejs/vue-router' },
+  { value: 'babel', link: 'https://github.com/babel/babel' },
+]
+
+let timeout: number = 0
+const querySearchAsync = debounce((queryString: string, callback: (arg: any) => void) => {
+  console.log(queryString)
+  callback(suggestions)
+}, 1000)
+
 </script>
 
 <style>

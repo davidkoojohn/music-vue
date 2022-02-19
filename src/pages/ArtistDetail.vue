@@ -10,7 +10,7 @@
         <el-skeleton-item variant="text" />
       </template>
       <template #default>
-        <el-row :gutter="10">
+        <el-row :gutter="20">
           <el-col
             :span="6"
             :xs="24"
