@@ -1,12 +1,23 @@
 <template>
   <base-layout>
-    <h1>{{ artistInfo.name }}</h1>
-    <img :src="artistInfo.cover" :alt="artistInfo.name" width="200">
-    <p>单曲数：{{ artistInfo.musicSize }}</p>
-    <p>专辑数：{{ artistInfo.albumSize }}</p>
-    <p>mv数：{{ artistInfo.mvSize }}</p>
-    <p class="desc">简介：{{ artistInfo.briefDesc }}</p>
-
+    <el-skeleton :loading="isLoading" animated>
+      <template #template>
+        <el-skeleton-item variant="image" style="width: 240px; height: 200px; margin-bottom: 20px" />
+        <el-skeleton-item variant="text" style="width: 240px" />
+        <el-skeleton-item variant="text" style="width: 240px" />
+        <el-skeleton-item variant="text" style="width: 240px" />
+        <el-skeleton-item variant="text" />
+        <el-skeleton-item variant="text" />
+      </template>
+      <template #default>
+        <h1>{{ artistInfo.name }}</h1>
+        <img :src="artistInfo.cover" :alt="artistInfo.name" width="200">
+        <p>单曲数：{{ artistInfo.musicSize }}</p>
+        <p>专辑数：{{ artistInfo.albumSize }}</p>
+        <p>mv数：{{ artistInfo.mvSize }}</p>
+        <p class="desc">简介：{{ artistInfo.briefDesc }}</p>
+      </template>
+    </el-skeleton>
     <el-divider content-position="left">
       <el-icon><headset /></el-icon>
     </el-divider>
@@ -25,7 +36,7 @@ import { onBeforeMount, ref, h, toRefs } from "vue"
 import { useRoute } from "vue-router"
 import { Headset } from "@element-plus/icons-vue"
 import { useArtistStore } from "../stores/artist"
-import { ElLoading, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 
 const size = ref(10)
 const spacer = h(ElDivider, { direction: 'vertical' })
@@ -36,14 +47,15 @@ const { id } = route.params
 const artist = useArtistStore()
 const { artistInfo } = toRefs(artist)
 
+const isLoading = ref<boolean>(false)
 const getArtist = async (id: number) => {
-  const loading = ElLoading.service({ fullscreen: true })
+  isLoading.value = true
   try {
     await artist.fetchArtistDetail(id)
   } catch (e) {
     ElMessage.error("网络错误，请稍后重试！")
   } finally {
-    loading.close()
+    isLoading.value = false
   }
 }
 

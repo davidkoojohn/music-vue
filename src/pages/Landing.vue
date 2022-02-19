@@ -53,7 +53,7 @@
             shadow="hover"
             @click="toArtistDetailPage(item.id)"
         >
-          <img :src="item.picUrl" class="image"/>
+          <img :src="item.img1v1Url" class="image"/>
           <div style="padding-top: 10px">
             <span>{{ item.name }}</span>
           </div>
@@ -114,8 +114,6 @@ onBeforeMount(async () => {
 <style scoped>
 .image {
   width: 100%;
-  height: 100px;
-  object-fit: cover;
 }
 
 .el-card {

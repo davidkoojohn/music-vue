@@ -11,7 +11,7 @@
       <el-card
           :body-style="{ padding: '10px' }"
       >
-        <img height="200" :src="item.picUrl" class="image"/>
+        <img :src="item.picUrl" class="image"/>
         <div style="padding-top: 10px">
           <span class="ellipsis">{{ item.name }}</span>
         </div>
@@ -49,8 +49,6 @@ onBeforeMount(async () => {
 <style scoped>
 .image {
   width: 100%;
-  height: 100px;
-  object-fit: cover;
 }
 
 .ellipsis {
@@ -66,5 +64,9 @@ onBeforeMount(async () => {
 
 .el-card {
   margin-bottom: 10px;
+}
+
+.el-card:hover {
+  background-color: #42b983;
 }
 </style>
